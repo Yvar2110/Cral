@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -12,13 +11,9 @@ import {
   FormGroup,
   ModalFooter,
 } from "reactstrap";
+import { borrar, GuardarData, listarData } from "./firebase/index";
 
-const data = [
-  { id: 1, nombre: "Naruto", apellido: "Naruto", direccion: "cra8", telefono: "3215651231" },
-  { id: 2, nombre: "Goku", apellido: "Dragon Ball", direccion: "cra8", telefono: "3215651231" },
-  { id: 3, nombre: "Kenshin Himura", apellido: "Rurouni Kenshin",  direccion: "cra8", telefono: "3215651231" },
-
-];
+const data = [];
 
 class App extends React.Component {
   state = {
@@ -30,9 +25,23 @@ class App extends React.Component {
       nombre: "",
       apellido: "",
       direccion: "",
+      ciudad: "",
       telefono: ""
+      
     },
   };
+
+
+  componentDidMount() {
+    (async () => {
+      console.log(await listarData())
+      this.setState({
+        ...this.state, data: await listarData()
+      })
+    })()
+    console.log(this.state)
+  }
+
 
   mostrarModalActualizar = (dato) => {
     this.setState({
@@ -61,13 +70,15 @@ class App extends React.Component {
         arreglo[contador].apellido = dato.apellido;
         arreglo[contador].direccion = dato.direccion;
         arreglo[contador].telefono = dato.telefono;
+        arreglo[contador].ciudad = dato.ciudad;
+
       }
       contador++;
     });
     this.setState({ data: arreglo, modalActualizar: false });
   };
 
-  eliminar = (dato) => {
+  eliminar = async (dato) => {
     var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento " + dato.id);
     if (opcion == true) {
       var contador = 0;
@@ -78,14 +89,16 @@ class App extends React.Component {
         }
         contador++;
       });
+      await borrar(dato.id)
       this.setState({ data: arreglo, modalActualizar: false });
     }
   };
 
-  insertar = () => {
+  insertar = async () => {
     var valorNuevo = { ...this.state.form };
     valorNuevo.id = this.state.data.length + 1;
     var lista = this.state.data;
+    await GuardarData(valorNuevo)
     lista.push(valorNuevo);
     this.setState({ modalInsertar: false, data: lista });
   }
@@ -111,10 +124,11 @@ class App extends React.Component {
           <Table>
             <thead>
               <tr>
-                <th>ID</th>
+
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Direccion</th>
+                <th>Ciudad</th>
                 <th>Telefono</th>
                 <th>Acción</th>
               </tr>
@@ -123,19 +137,16 @@ class App extends React.Component {
             <tbody>
               {this.state.data.map((dato) => (
                 <tr key={dato.id}>
-                  <td>{dato.id}</td>
+
                   <td>{dato.nombre}</td>
                   <td>{dato.apellido}</td>
                   <td>{dato.direccion}</td>
+                  <td>{dato.ciudad}</td>
                   <td>{dato.telefono}</td>
+                  
 
                   <td>
-                    <Button
-                      color="primary"
-                      onClick={() => this.mostrarModalActualizar(dato)}
-                    >
-                      Editar
-                    </Button>{" "}
+                    
                     <Button color="danger" onClick={() => this.eliminar(dato)}>Eliminar</Button>
                   </td>
                 </tr>
@@ -153,7 +164,6 @@ class App extends React.Component {
               <label>
                 Id:
               </label>
-
               <input
                 className="form-control"
                 readOnly
@@ -199,6 +209,18 @@ class App extends React.Component {
             </FormGroup>
             <FormGroup>
               <label>
+                Ciudad:
+              </label>
+              <input
+                className="form-control"
+                name="ciudad"
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.form.ciudad}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
                 Telefono:
               </label>
               <input
@@ -212,12 +234,7 @@ class App extends React.Component {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => this.editar(this.state.form)}
-            >
-              Editar
-            </Button>
+           
           </ModalFooter>
         </Modal>
 
@@ -260,7 +277,7 @@ class App extends React.Component {
               </label>
               <input
                 className="form-control"
-                name="Apellido"
+                name="apellido"
                 type="text"
                 onChange={this.handleChange}
               />
@@ -272,6 +289,17 @@ class App extends React.Component {
               <input
                 className="form-control"
                 name="direccion"
+                type="text"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
+                Ciudad:
+              </label>
+              <input
+                className="form-control"
+                name="ciudad"
                 type="text"
                 onChange={this.handleChange}
               />
