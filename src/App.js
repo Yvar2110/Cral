@@ -11,7 +11,7 @@ import {
   FormGroup,
   ModalFooter,
 } from "reactstrap";
-import { GuardarData, listarData } from "./firebase/index";
+import { borrar, GuardarData, listarData } from "./firebase/index";
 
 const data = [];
 
@@ -25,7 +25,9 @@ class App extends React.Component {
       nombre: "",
       apellido: "",
       direccion: "",
+      ciudad: "",
       telefono: ""
+      
     },
   };
 
@@ -68,13 +70,15 @@ class App extends React.Component {
         arreglo[contador].apellido = dato.apellido;
         arreglo[contador].direccion = dato.direccion;
         arreglo[contador].telefono = dato.telefono;
+        arreglo[contador].ciudad = dato.ciudad;
+
       }
       contador++;
     });
     this.setState({ data: arreglo, modalActualizar: false });
   };
 
-  eliminar = (dato) => {
+  eliminar = async (dato) => {
     var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento " + dato.id);
     if (opcion == true) {
       var contador = 0;
@@ -85,6 +89,7 @@ class App extends React.Component {
         }
         contador++;
       });
+      await borrar(dato.id)
       this.setState({ data: arreglo, modalActualizar: false });
     }
   };
@@ -123,6 +128,7 @@ class App extends React.Component {
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Direccion</th>
+                <th>Ciudad</th>
                 <th>Telefono</th>
                 <th>Acción</th>
               </tr>
@@ -135,15 +141,12 @@ class App extends React.Component {
                   <td>{dato.nombre}</td>
                   <td>{dato.apellido}</td>
                   <td>{dato.direccion}</td>
+                  <td>{dato.ciudad}</td>
                   <td>{dato.telefono}</td>
+                  
 
                   <td>
-                    <Button
-                      color="primary"
-                      onClick={() => this.mostrarModalActualizar(dato)}
-                    >
-                      Editar
-                    </Button>{" "}
+                    
                     <Button color="danger" onClick={() => this.eliminar(dato)}>Eliminar</Button>
                   </td>
                 </tr>
@@ -206,6 +209,18 @@ class App extends React.Component {
             </FormGroup>
             <FormGroup>
               <label>
+                Ciudad:
+              </label>
+              <input
+                className="form-control"
+                name="ciudad"
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.form.ciudad}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
                 Telefono:
               </label>
               <input
@@ -219,12 +234,7 @@ class App extends React.Component {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => this.editar(this.state.form)}
-            >
-              Editar
-            </Button>
+           
           </ModalFooter>
         </Modal>
 
@@ -279,6 +289,17 @@ class App extends React.Component {
               <input
                 className="form-control"
                 name="direccion"
+                type="text"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
+                Ciudad:
+              </label>
+              <input
+                className="form-control"
+                name="ciudad"
                 type="text"
                 onChange={this.handleChange}
               />

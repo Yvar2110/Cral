@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, addDoc, query, where, updateDoc, doc } from 'firebase/firestore/lite';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,8 +20,11 @@ const db = getFirestore(app);
 
 const GuardarData = async (data) => {
     try {
-        const docRef = await addDoc(collection(db, "clients"),
-            data
+        const docRef = await addDoc(collection(db, "clients"),{
+            ...data,
+            status : "active"
+        }
+          
         );
         console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -31,8 +34,8 @@ const GuardarData = async (data) => {
 
 const listarData = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, "clients"));
-
+        const q = query(collection(db, "clients"), where("status", "==", "active"));
+        const querySnapshot = await getDocs(q);
         return await querySnapshot.docs.map((doc) => ({
             ...doc.data(),
             id: doc.id,
@@ -41,4 +44,17 @@ const listarData = async () => {
         console.log(error);
     }
 }
-export { GuardarData, listarData }
+const borrar = async (id) => {
+    try {
+        const data = doc(db, "clients", id)
+        await updateDoc(data, {
+            status: "deleted",
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+export { GuardarData, listarData,borrar }
