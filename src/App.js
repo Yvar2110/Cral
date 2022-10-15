@@ -65,7 +65,7 @@ class App extends React.Component {
     var contador = 0;
     var arreglo = this.state.data;
     arreglo.map((registro) => {
-      if (dato.id == registro.id) {
+      if (dato.id === registro.id) {
         arreglo[contador].nombre = dato.nombre;
         arreglo[contador].apellido = dato.apellido;
         arreglo[contador].direccion = dato.direccion;
@@ -80,11 +80,11 @@ class App extends React.Component {
 
   eliminar = async (dato) => {
     var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento " + dato.id);
-    if (opcion == true) {
+    if (opcion === true) {
       var contador = 0;
       var arreglo = this.state.data;
       arreglo.map((registro) => {
-        if (dato.id == registro.id) {
+        if (dato.id === registro.id) {
           arreglo.splice(contador, 1);
         }
         contador++;
