@@ -14,10 +14,10 @@ import {
 } from "reactstrap";
 
 const data = [
-  { id: 1, nombre: "Naruto", apellido: "Naruto" },
-  { id: 2, nombre: "Goku", apellido: "Dragon Ball" },
-  { id: 3, nombre: "Kenshin Himura", apellido: "Rurouni Kenshin" },
-  
+  { id: 1, nombre: "Naruto", apellido: "Naruto", direccion: "cra8", telefono: "3215651231" },
+  { id: 2, nombre: "Goku", apellido: "Dragon Ball", direccion: "cra8", telefono: "3215651231" },
+  { id: 3, nombre: "Kenshin Himura", apellido: "Rurouni Kenshin",  direccion: "cra8", telefono: "3215651231" },
+
 ];
 
 class App extends React.Component {
@@ -29,6 +29,8 @@ class App extends React.Component {
       id: "",
       nombre: "",
       apellido: "",
+      direccion: "",
+      telefono: ""
     },
   };
 
@@ -57,6 +59,8 @@ class App extends React.Component {
       if (dato.id == registro.id) {
         arreglo[contador].nombre = dato.nombre;
         arreglo[contador].apellido = dato.apellido;
+        arreglo[contador].direccion = dato.direccion;
+        arreglo[contador].telefono = dato.telefono;
       }
       contador++;
     });
@@ -64,7 +68,7 @@ class App extends React.Component {
   };
 
   eliminar = (dato) => {
-    var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento "+dato.id);
+    var opcion = window.confirm("Estás Seguro que deseas Eliminar el elemento " + dato.id);
     if (opcion == true) {
       var contador = 0;
       var arreglo = this.state.data;
@@ -78,10 +82,10 @@ class App extends React.Component {
     }
   };
 
-  insertar= ()=>{
-    var valorNuevo= {...this.state.form};
-    valorNuevo.id=this.state.data.length+1;
-    var lista= this.state.data;
+  insertar = () => {
+    var valorNuevo = { ...this.state.form };
+    valorNuevo.id = this.state.data.length + 1;
+    var lista = this.state.data;
     lista.push(valorNuevo);
     this.setState({ modalInsertar: false, data: lista });
   }
@@ -96,12 +100,12 @@ class App extends React.Component {
   };
 
   render() {
-    
+
     return (
       <>
         <Container>
-        <br />
-          <Button color="success" onClick={()=>this.mostrarModalInsertar()}>Crear</Button>
+          <br />
+          <Button color="success" onClick={() => this.mostrarModalInsertar()}>Crear</Button>
           <br />
           <br />
           <Table>
@@ -110,6 +114,8 @@ class App extends React.Component {
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -120,6 +126,9 @@ class App extends React.Component {
                   <td>{dato.id}</td>
                   <td>{dato.nombre}</td>
                   <td>{dato.apellido}</td>
+                  <td>{dato.direccion}</td>
+                  <td>{dato.telefono}</td>
+
                   <td>
                     <Button
                       color="primary"
@@ -127,7 +136,7 @@ class App extends React.Component {
                     >
                       Editar
                     </Button>{" "}
-                    <Button color="danger" onClick={()=> this.eliminar(dato)}>Eliminar</Button>
+                    <Button color="danger" onClick={() => this.eliminar(dato)}>Eliminar</Button>
                   </td>
                 </tr>
               ))}
@@ -137,15 +146,14 @@ class App extends React.Component {
 
         <Modal isOpen={this.state.modalActualizar}>
           <ModalHeader>
-           <div><h3>Editar Cliente</h3></div>
+            <div><h3>Editar Cliente</h3></div>
           </ModalHeader>
-
           <ModalBody>
             <FormGroup>
               <label>
-               Id:
+                Id:
               </label>
-            
+
               <input
                 className="form-control"
                 readOnly
@@ -153,10 +161,9 @@ class App extends React.Component {
                 value={this.state.form.id}
               />
             </FormGroup>
-            
             <FormGroup>
               <label>
-                Nombre: 
+                Nombre:
               </label>
               <input
                 className="form-control"
@@ -166,10 +173,9 @@ class App extends React.Component {
                 value={this.state.form.nombre}
               />
             </FormGroup>
-            
             <FormGroup>
               <label>
-                Apellido: 
+                Apellido:
               </label>
               <input
                 className="form-control"
@@ -177,6 +183,30 @@ class App extends React.Component {
                 type="text"
                 onChange={this.handleChange}
                 value={this.state.form.apellido}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
+                Direccion:
+              </label>
+              <input
+                className="form-control"
+                name="direccion"
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.form.direccion}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
+                Telefono:
+              </label>
+              <input
+                className="form-control"
+                name="telefono"
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.form.telefono}
               />
             </FormGroup>
           </ModalBody>
@@ -195,26 +225,26 @@ class App extends React.Component {
 
         <Modal isOpen={this.state.modalInsertar}>
           <ModalHeader>
-           <div><h3>Insertar Cliente</h3></div>
+            <div><h3>Insertar Cliente</h3></div>
           </ModalHeader>
 
           <ModalBody>
             <FormGroup>
               <label>
-                Id: 
+                Id:
               </label>
-              
+
               <input
                 className="form-control"
                 readOnly
                 type="text"
-                value={this.state.data.length+1}
+                value={this.state.data.length + 1}
               />
             </FormGroup>
-            
+
             <FormGroup>
               <label>
-                Nombre: 
+                Nombre:
               </label>
               <input
                 className="form-control"
@@ -223,14 +253,36 @@ class App extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            
+
             <FormGroup>
               <label>
-                Apellido: 
+                Apellido:
               </label>
               <input
                 className="form-control"
                 name="Apellido"
+                type="text"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
+                Direccion:
+              </label>
+              <input
+                className="form-control"
+                name="direccion"
+                type="text"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label>
+                Telefono:
+              </label>
+              <input
+                className="form-control"
+                name="telefono"
                 type="text"
                 onChange={this.handleChange}
               />
