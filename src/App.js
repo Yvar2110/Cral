@@ -62,17 +62,15 @@ class App extends React.Component {
   editar = (dato) => {
     var contador = 0;
     var arreglo = this.state.data;
-    arreglo.map((registro) => {
+    arreglo.forEach((registro) => {
       if (dato.id === registro.id) {
         arreglo[contador].nombre = dato.nombre;
         arreglo[contador].apellido = dato.apellido;
         arreglo[contador].direccion = dato.direccion;
         arreglo[contador].telefono = dato.telefono;
         arreglo[contador].ciudad = dato.ciudad;
-
       }
       contador++;
-      return;
     });
     this.setState({ data: arreglo, modalActualizar: false });
   };
@@ -87,7 +85,6 @@ class App extends React.Component {
           arreglo.splice(contador, 1);
         }
         contador++;
-        return; 
       });
       await borrar(dato.id)
       this.setState({ data: arreglo, modalActualizar: false });
