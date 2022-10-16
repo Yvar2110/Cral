@@ -82,7 +82,7 @@ class App extends React.Component {
     if (opcion === true) {
       var contador = 0;
       var arreglo = this.state.data;
-      arreglo.map((registro) => {
+      arreglo.forEach((registro) => {
         if (dato.id === registro.id) {
           arreglo.splice(contador, 1);
         }
