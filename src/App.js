@@ -65,7 +65,7 @@ class App extends React.Component {
     var contador = 0;
     var arreglo = this.state.data;
     arreglo.map((registro) => {
-      if (dato.id === registro.id) {
+      if (dato.id == registro.id) {
         arreglo[contador].nombre = dato.nombre;
         arreglo[contador].apellido = dato.apellido;
         arreglo[contador].direccion = dato.direccion;
