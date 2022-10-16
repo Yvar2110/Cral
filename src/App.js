@@ -72,6 +72,7 @@ class App extends React.Component {
 
       }
       contador++;
+      return;
     });
     this.setState({ data: arreglo, modalActualizar: false });
   };
@@ -86,10 +87,12 @@ class App extends React.Component {
           arreglo.splice(contador, 1);
         }
         contador++;
+        return; 
       });
       await borrar(dato.id)
       this.setState({ data: arreglo, modalActualizar: false });
     }
+    
   };
 
   insertar = async () => {
