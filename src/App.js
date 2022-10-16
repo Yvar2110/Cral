@@ -27,7 +27,7 @@ class App extends React.Component {
       direccion: "",
       ciudad: "",
       telefono: ""
-      
+
     },
   };
 
@@ -59,13 +59,11 @@ class App extends React.Component {
       modalInsertar: true,
     });
   };
-
-
   editar = (dato) => {
     var contador = 0;
     var arreglo = this.state.data;
-    arreglo.map((registro) => {
-      if (dato.id == registro.id) {
+    arreglo.forEach((registro) => {
+      if (dato.id === registro.id) {
         arreglo[contador].nombre = dato.nombre;
         arreglo[contador].apellido = dato.apellido;
         arreglo[contador].direccion = dato.direccion;
@@ -83,7 +81,7 @@ class App extends React.Component {
     if (opcion === true) {
       var contador = 0;
       var arreglo = this.state.data;
-      arreglo.map((registro) => {
+      arreglo.forEach((registro) => {
         if (dato.id === registro.id) {
           arreglo.splice(contador, 1);
         }
@@ -92,6 +90,7 @@ class App extends React.Component {
       await borrar(dato.id)
       this.setState({ data: arreglo, modalActualizar: false });
     }
+
   };
 
   insertar = async () => {
@@ -111,9 +110,7 @@ class App extends React.Component {
       },
     });
   };
-
   render() {
-
     return (
       <>
         <Container>
@@ -137,16 +134,12 @@ class App extends React.Component {
             <tbody>
               {this.state.data.map((dato) => (
                 <tr key={dato.id}>
-
                   <td>{dato.nombre}</td>
                   <td>{dato.apellido}</td>
                   <td>{dato.direccion}</td>
                   <td>{dato.ciudad}</td>
                   <td>{dato.telefono}</td>
-                  
-
                   <td>
-                    
                     <Button color="danger" onClick={() => this.eliminar(dato)}>Eliminar</Button>
                   </td>
                 </tr>
@@ -154,7 +147,6 @@ class App extends React.Component {
             </tbody>
           </Table>
         </Container>
-
         <Modal isOpen={this.state.modalActualizar}>
           <ModalHeader>
             <div><h3>Editar Cliente</h3></div>
@@ -232,14 +224,9 @@ class App extends React.Component {
               />
             </FormGroup>
           </ModalBody>
-
           <ModalFooter>
-           
           </ModalFooter>
         </Modal>
-
-
-
         <Modal isOpen={this.state.modalInsertar}>
           <ModalHeader>
             <div><h3>Insertar Cliente</h3></div>
