@@ -69,7 +69,6 @@ class App extends React.Component {
         arreglo[contador].direccion = dato.direccion;
         arreglo[contador].telefono = dato.telefono;
         arreglo[contador].ciudad = dato.ciudad;
-
       }
       contador++;
     });
